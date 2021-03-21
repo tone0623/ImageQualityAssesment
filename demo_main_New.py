@@ -121,15 +121,15 @@ def train(args):
     M = 64
 
     nn.clear_parameters()  # Clear　
-    Input = nn.Variable([args.batch_size, 6, 256, 256])
+    Input = nn.Variable([args.batch_size, 6, 128, 128])
     Trues = nn.Variable([args.batch_size, 1])  # True Value
 
     #   Network Definition
     Name = "CNN"  # Name of scope which includes network models (arbitrary)
     Name2 = "CNN"
     preOutput = network(input=Input, feature_num=M, scope=Name)    # Network & Output #add
-    preOutput = F.reshape(preOutput, (args.batch_size, 1, M))      # (B*N, M) > (B, N, M)
-    preOutput = F.mean(preOutput, axis=1, keepdims=True)  # (B, N, M) > (B, 1, M) N個のシフト画像の特徴量を１つにする keepdims->次元を保持
+    # preOutput = F.reshape(preOutput, (args.batch_size, 1, M))      # (B*N, M) > (B, N, M)
+    # preOutput = F.mean(preOutput, axis=1, keepdims=True)  # (B, N, M) > (B, 1, M) N個のシフト画像の特徴量を１つにする keepdims->次元を保持
     Output = network2(input=preOutput, scope=Name2)  # fullconnect
 
     #   Loss Definition
@@ -149,7 +149,7 @@ def train(args):
 
     #   Training Data Setting
     #image_data, mos_data, image_files = dt.data_loader(test = False)
-    image_data, mos_data  = dt.data_loader(test=False)
+    image_data, mos_data, similarity  = dt.data_loader(test=False)
 
     #batches = dt.create_batch(image_data, mos_data, args.batch_size, image_files)
     batches = dt.create_batch(image_data, mos_data, args.batch_size)

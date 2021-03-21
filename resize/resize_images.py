@@ -27,15 +27,15 @@ def crop_center(pil_img, crop_width, crop_height):
                          (img_height + crop_height) // 2))
 
 # 画像サイズ (一辺)
-Size = 256
+Size = 128
 
 # フォルダ作成
-file_dir = glob.glob("../data/brother_girl")
-new_dir = './Girl/256x256'.format(Size)
+file_dir = glob.glob("./exreference")
+new_dir = './exreference_128x128'.format(Size)
 os.makedirs(new_dir, exist_ok=True)
 
 # 画像検索
-files = glob.glob(file_dir[0]+'/*.bmp')
+files = glob.glob(file_dir[0]+'/*.png')
 print(' {0} files exit.'.format(len(files)))
 
 # リサイズ

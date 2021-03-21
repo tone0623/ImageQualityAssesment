@@ -18,7 +18,11 @@ from settings_New import settings
 
 import os
 
-import compression as comp
+#コントラスト類似度計算
+import contrastSimilarity as cont
+
+#ヒストグラム平坦化
+import histgramEqualize as hist
 
 
 
@@ -65,8 +69,10 @@ def data_loader(test=False):
         pkl_mask = args.pkl_path + '/test_mask.pkl'
         mask_names = args.test_mask_path + '/*.' + "bmp"
 
+
     image_data = []
     mask_data = []
+    similarity  = []
 
 
     ##  ~~~~~~~~~~~~~~~~~~~
@@ -82,9 +88,8 @@ def data_loader(test=False):
 
         for image_file in sorted(glob.glob(image_names), key=numericalSort):
             img = cv2.imread(image_file)
-            resized_img = comp.compression(img)
-            image_data.append(resized_img.transpose(2,0,1))
-
+            #image_data.append(img.transpose(2,0,1))
+            image_data.append(img)
 
         image_data = np.array(image_data)
 
@@ -96,7 +101,9 @@ def data_loader(test=False):
 
 
         for mask_file in sorted(glob.glob(mask_names), key=numericalSort):
-            mask_data.append(cv2.imread(mask_file).transpose(2, 0, 1))
+            mask = cv2.imread(mask_file)
+                #mask_data.append(mask.transpose(2, 0, 1))
+            mask_data.append(mask)
 
         mask_data = np.array(mask_data)
 
@@ -127,9 +134,20 @@ def data_loader(test=False):
                 print(' Load Mask Pkl...')
                 mask_data = joblib.load(f)
 
-    image_data = np.concatenate((image_data, mask_data), axis=1)
+    #コントラスト類似度を取得　(画像枚数,3) & ヒストグラム平坦化
+    histimg = []
+    histmask = []
+    for i in range (5670):
+        img1 = image_data[i]
+        img2 = mask_data[i]
+        similarity.append(cont.contrastSimilarity(img1, img2))
+        histimg.append(hist.histgramEqualize(img1).transpose(2, 0, 1))
+        histmask.append(hist.histgramEqualize(img2).transpose(2, 0, 1))
 
-    return image_data, eval_data
+
+    image_data = np.concatenate((histimg, histmask), axis=1)
+
+    return image_data, eval_data , similarity
 
 
 class create_batch:
