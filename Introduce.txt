@@ -1,0 +1,8 @@
+～ファイルの説明～
+・demo_main4.py　→　ResNet&切り抜き&マスク(3/19最新)
+・data4.py　→　ResNet&切り抜き&マスクのデータ読み込みファイル(3/19最新)
+・setting4.py　→　ResNet&切り抜き&マスクの設定ファイル(3/19最新)
+・makeinput　→　切り抜き画像作成ファイル(3/19最新)
+・equalizeHist.py　→　ヒストグラム平坦化ファイル(3/19最新)
+・contrastSimilarity.py　→　コントラスト類似度ファイル(3/19最新)
+　
